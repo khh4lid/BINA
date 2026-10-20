@@ -1,0 +1,900 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Bayyina — Your voice, in sign language</title>
+<meta name="description" content="Bayyina turns speech into sign language with Saudi and Malaysian avatars. 15 signs shown side by side with the original videos, 98.2% average match.">
+<meta name="author" content="Khaled Waleed Khamis Ba Tais">
+<meta name="copyright" content="© 2026 Khaled Waleed Khamis Ba Tais. All rights reserved.">
+<meta name="theme-color" content="#00a3ab">
+<link rel="icon" type="image/png" sizes="32x32" href="img/favicon-32.png">
+<link rel="icon" type="image/png" sizes="512x512" href="img/icon-512.png">
+<link rel="apple-touch-icon" href="img/icon-180.png">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Bayyina">
+<meta property="og:title" content="Bayyina — Your voice, in sign language">
+<meta property="og:description" content="Saudi and Malaysian sign-language avatars · 15 signs · 98.2% match with the original videos.">
+<meta property="og:image" content="img/share.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:image:alt" content="Bayyina's Saudi and Malaysian avatars">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Baloo+2:wght@600;700;800&family=Baloo+Bhaijaan+2:wght@500;600;700;800&family=Nunito:wght@500;600;700;800&display=swap">
+<style>
+/* Layout: playful app-like scroll. Sticky top bar (phone: bottom tab bar), hero with the two avatars on a
+   bright stage, three-step "how it works", avatar cards, accuracy ring + stat tiles, sign gallery with
+   Avatar / Compare views. Chunky rounded cards with a solid bottom edge, one bright colour per role. */
+:root {
+  --bg: #ffffff;
+  --bg-soft: #f2f8f8;
+  --surface: #ffffff;
+  --ink: #0b2e2f;            /* deep green of the logo */
+  --muted: #5f7576;
+  --line: #e3ecec;
+  --teal: #00a3ab;  --teal-lip: #008087;  --teal-soft: #dff3f4;
+  --sun: #ffc800;   --sun-lip: #e0a800;
+  --coral: #ff5d62; --coral-lip: #db3f45;
+  --sky: #1cb0f6;   --sky-lip: #1394d0;
+  --grape: #a66cff; --grape-lip: #8550df;
+  --leaf: #58cc02;  --leaf-lip: #46a302;
+  --pink: #ff86c8;
+  --on-bright: #ffffff;
+  --stage: #0b2e2f;
+  --show-light: block; --show-dark: none;
+  --font-display: "Baloo 2", "Baloo Bhaijaan 2", "Arial Rounded MT Bold", system-ui, sans-serif;
+  --font-body: "Nunito", "Baloo Bhaijaan 2", "Segoe UI", system-ui, sans-serif;
+}
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) {
+  --bg: #0d1b1d; --bg-soft: #112326; --surface: #15292c; --ink: #eaf6f6; --muted: #9db4b6; --line: #24393c;
+  --teal-soft: #11373a; --stage: #071415; --show-light: none; --show-dark: block; color-scheme: dark } }
+:root[data-theme="dark"] {
+  --bg: #0d1b1d; --bg-soft: #112326; --surface: #15292c; --ink: #eaf6f6; --muted: #9db4b6; --line: #24393c;
+  --teal-soft: #11373a; --stage: #071415; --show-light: none; --show-dark: block; color-scheme: dark }
+
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink); font: 600 17px/1.5 var(--font-body); }
+:lang(ar) body, body:lang(ar) { font-family: "Baloo Bhaijaan 2", var(--font-body); }
+img { display: block; max-width: 100%; }
+button { font: inherit; color: inherit; cursor: pointer; }
+button:focus-visible, a:focus-visible { outline: 3px solid var(--sky); outline-offset: 3px; }
+.wrap { max-width: 1160px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+h1, h2, h3 { font-family: var(--font-display); margin: 0; text-wrap: balance; line-height: 1.08; }
+h1 { font-size: clamp(40px, 6.2vw, 72px); font-weight: 800; letter-spacing: -0.02em; }
+h2 { font-size: clamp(30px, 4vw, 44px); font-weight: 800; letter-spacing: -0.01em; }
+h3 { font-size: 22px; font-weight: 700; }
+p { margin: 0; }
+.logo-l { display: var(--show-light); } .logo-d { display: var(--show-dark); }
+.tier i, .stats-mini i, .chips i, .gauge i { font-style: normal; }
+.pill svg { width: 18px; height: 18px; fill: currentColor; color: currentColor; flex: none; }
+:lang(ar) * { letter-spacing: 0 !important; }
+section[id], main[id] { scroll-margin-top: 84px; }
+
+/* buttons: chunky with a solid bottom edge */
+.btn { display: inline-flex; align-items: center; gap: 10px; border: 0; border-radius: 16px; padding: 15px 24px 13px;
+  font: 800 16px/1 var(--font-display); letter-spacing: 0.04em; text-transform: uppercase; text-decoration: none;
+  background: var(--teal); color: var(--on-bright); box-shadow: 0 5px 0 var(--teal-lip); transition: transform .08s, box-shadow .08s; }
+.btn:active { transform: translateY(5px); box-shadow: 0 0 0 var(--teal-lip); }
+.btn.ghost { background: var(--surface); color: var(--teal); box-shadow: 0 5px 0 var(--line); border: 2px solid var(--line); }
+.btn svg { width: 20px; height: 20px; fill: currentColor; }
+
+/* top bar */
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--bg); }
+.top { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 9; background: var(--bg); border-bottom: 2px solid var(--line); }
+.top .wrap { display: flex; align-items: center; gap: 18px; padding-block: 10px; }
+.brand { display: flex; align-items: center; gap: 10px; text-decoration: none; color: var(--ink); }
+.brand img { height: 40px; width: auto; }
+.brand span { font: 800 22px/1 var(--font-display); letter-spacing: -0.01em; }
+.nav { display: flex; gap: 6px; margin-inline-start: auto; }
+.nav a { text-decoration: none; color: var(--muted); font: 800 15px/1 var(--font-display); letter-spacing: 0.05em; text-transform: uppercase;
+  padding: 11px 14px 9px; border-radius: 12px; border: 2px solid transparent; }
+.nav a:hover { color: var(--teal); background: var(--teal-soft); border-color: var(--teal-soft); }
+.lang { border: 2px solid var(--line); background: var(--surface); border-radius: 12px; padding: 8px 14px 6px; box-shadow: 0 3px 0 var(--line);
+  font: 800 15px/1 var(--font-display); color: var(--ink); }
+
+/* hero */
+.hero .wrap { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr); gap: 40px; align-items: center; padding-block: 48px 64px; }
+.hero-copy { display: grid; gap: 22px; justify-items: start; }
+.chip-row { display: flex; gap: 8px; flex-wrap: wrap; }
+.pill { display: inline-flex; align-items: center; gap: 8px; border-radius: 999px; padding: 7px 14px 5px; font: 800 14px/1 var(--font-display);
+  letter-spacing: 0.04em; text-transform: uppercase; background: var(--teal-soft); color: var(--teal); }
+.pill.sun { background: var(--sun); color: var(--ink); }
+.dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; }
+.hero h1 .hl { color: var(--teal); }
+.hero p.lead { font-size: 20px; color: var(--muted); max-width: 30ch; font-weight: 600; }
+.cta { display: flex; gap: 14px; flex-wrap: wrap; padding-top: 4px; }
+
+.stage { position: relative; aspect-ratio: 1.12; border-radius: 36px; overflow: hidden; background: var(--teal); box-shadow: 0 8px 0 var(--teal-lip); }
+.stage .b1, .stage .b2, .stage .b3, .stage .b4 { position: absolute; border-radius: 50%; }
+.stage .b1 { width: 62%; aspect-ratio: 1; background: var(--sun); left: -8%; bottom: -14%; }
+.stage .b2 { width: 56%; aspect-ratio: 1; background: var(--pink); right: -10%; bottom: -6%; }
+.stage .b3 { width: 9%; aspect-ratio: 1; background: var(--sky); top: 12%; right: 22%; }
+.stage .b4 { width: 5%; aspect-ratio: 1; background: var(--grape); top: 30%; left: 46%; }
+.stage .av { position: absolute; bottom: 0; height: 86%; width: auto; filter: drop-shadow(0 10px 18px rgba(0, 0, 0, .18)); }
+.stage .av.sa { left: 6%; }
+.stage .av.my { right: 4%; height: 82%; }
+.bubble { position: absolute; top: 7%; left: 6%; display: flex; align-items: center; gap: 10px; background: #ffffff; color: #0b2e2f;
+  border-radius: 20px; padding: 12px 16px; box-shadow: 0 5px 0 rgba(0, 0, 0, .12); }
+.bubble::after { content: ""; position: absolute; bottom: -10px; left: 34px; border: 10px solid transparent; border-top-color: #ffffff; border-bottom: 0; }
+.bubble svg { width: 26px; height: 26px; fill: var(--coral); color: var(--coral); }
+.bars { display: flex; gap: 4px; align-items: center; height: 26px; }
+.bars i { width: 5px; border-radius: 3px; background: var(--teal); height: 40%; }
+.bars i:nth-child(2) { height: 85%; background: var(--grape); } .bars i:nth-child(3) { height: 60%; background: var(--sun); }
+.bars i:nth-child(4) { height: 100%; background: var(--coral); } .bars i:nth-child(5) { height: 50%; background: var(--sky); }
+@media (prefers-reduced-motion: no-preference) {
+  .bars i { animation: talk 1.1s ease-in-out infinite; transform-origin: center; }
+  .bars i:nth-child(2) { animation-delay: .15s } .bars i:nth-child(3) { animation-delay: .3s } .bars i:nth-child(4) { animation-delay: .45s } .bars i:nth-child(5) { animation-delay: .6s }
+  @keyframes talk { 50% { transform: scaleY(.45); } }
+}
+.float { position: absolute; display: inline-flex; align-items: center; gap: 8px; border-radius: 14px; padding: 9px 14px 7px;
+  font: 800 15px/1 var(--font-display); box-shadow: 0 4px 0 rgba(0, 0, 0, .15); white-space: nowrap; }
+.float svg { width: 18px; height: 18px; fill: currentColor; }
+.float.ex { background: var(--leaf); color: #ffffff; top: 9%; right: 6%; }
+.float.tm { background: #ffffff; color: #0b2e2f; bottom: 9%; left: 50%; transform: translateX(-50%); }
+.float.tm svg { color: var(--sky); fill: none; }
+
+/* sections */
+.sec { padding-block: 72px; }
+.sec.soft { background: var(--bg-soft); }
+.sec-head { display: flex; align-items: end; justify-content: space-between; gap: 16px 24px; flex-wrap: wrap; margin-bottom: 30px; }
+.sec-head p { color: var(--muted); font-size: 18px; max-width: 46ch; }
+
+/* how it works */
+.steps { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
+.steps li { display: grid; justify-items: center; align-content: start; text-align: center; gap: 10px; position: relative; }
+.steps li + li::before { content: ""; position: absolute; top: 46px; inset-inline-end: calc(50% + 62px); width: calc(100% - 104px);
+  border-top: 4px dashed var(--line); }
+.bubble-ic { width: 92px; height: 92px; border-radius: 50%; display: grid; place-items: center; color: #ffffff; position: relative; }
+.bubble-ic svg { width: 44px; height: 44px; fill: #ffffff; color: #ffffff; }
+.bubble-ic b { position: absolute; top: -4px; inset-inline-end: -4px; width: 32px; height: 32px; border-radius: 50%; background: var(--surface);
+  color: var(--ink); border: 3px solid var(--line); display: grid; place-items: center; font: 800 16px/1 var(--font-display); }
+.s1 { background: var(--sky); box-shadow: 0 6px 0 var(--sky-lip); } .s2 { background: var(--grape); box-shadow: 0 6px 0 var(--grape-lip); }
+.s3 { background: var(--coral); box-shadow: 0 6px 0 var(--coral-lip); }
+.steps p { color: var(--muted); max-width: 22ch; }
+
+/* avatars */
+.avatars { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px; }
+.char { background: var(--surface); border: 2px solid var(--line); border-radius: 28px; overflow: hidden; box-shadow: 0 6px 0 var(--line);
+  display: grid; grid-template-rows: auto 1fr; }
+.char .top-art { position: relative; height: 340px; overflow: hidden; }
+.char.sa .top-art { background: var(--sun); } .char.my .top-art { background: var(--pink); }
+.char .top-art::before { content: ""; position: absolute; width: 70%; aspect-ratio: 1; border-radius: 50%; left: 15%; top: 18%; background: rgba(255, 255, 255, .35); }
+.char .top-art img { position: absolute; bottom: 0; left: 50%; transform: translateX(-50%); height: 96%; width: auto; }
+.char .body { padding: 22px 24px 24px; display: grid; gap: 14px; align-content: start; }
+.char .body p { color: var(--muted); }
+.stats-mini { display: flex; gap: 10px; flex-wrap: wrap; }
+.stats-mini span { display: inline-flex; align-items: center; gap: 6px; border: 2px solid var(--line); border-radius: 12px; padding: 7px 12px 5px;
+  font: 800 15px/1 var(--font-display); }
+.stats-mini svg { width: 18px; height: 18px; fill: var(--leaf); }
+.char .btn { justify-self: start; }
+.char.my .btn { background: var(--coral); box-shadow: 0 5px 0 var(--coral-lip); }
+.char.sa .btn { background: var(--leaf); box-shadow: 0 5px 0 var(--leaf-lip); }
+
+/* accuracy */
+.acc { display: grid; grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr); gap: 32px; align-items: center; }
+.gauge { position: relative; display: grid; place-items: center; justify-self: center; }
+.gauge .center { position: absolute; display: grid; justify-items: center; gap: 2px; }
+.gauge .center b { font: 800 56px/1 var(--font-display); letter-spacing: -0.02em; }
+.gauge .center b small { font-size: 0.45em; }
+.gauge .center span { color: var(--muted); font: 700 15px/1.2 var(--font-display); text-transform: uppercase; letter-spacing: .05em; }
+.ring { transform: rotate(-90deg); }
+.ring circle { fill: none; }
+.ring-bg { stroke: var(--line); }
+.ring-fg { stroke: var(--leaf); stroke-linecap: round; }
+.ring.big .ring-fg { stroke: var(--leaf); }
+.ring.vg .ring-fg { stroke: var(--sky); }
+@media (prefers-reduced-motion: no-preference) { .ring.big .ring-fg { animation: fill 1.4s cubic-bezier(.2, .8, .2, 1) both; }
+  @keyframes fill { from { stroke-dashoffset: var(--c); } to { stroke-dashoffset: var(--o); } } }
+.gauge .center .tier { color: #ffffff; text-transform: none; letter-spacing: 0; font: 800 14px/1 var(--font-display); margin-top: 8px; }
+.tiles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+.tile { border: 2px solid var(--line); border-radius: 22px; padding: 18px 18px 16px; display: grid; grid-template-columns: auto 1fr; gap: 4px 14px;
+  align-items: center; background: var(--surface); box-shadow: 0 4px 0 var(--line); min-width: 0; }
+.tile .ic { grid-row: span 2; width: 52px; height: 52px; border-radius: 16px; display: grid; place-items: center; }
+.tile .ic svg { width: 28px; height: 28px; fill: #ffffff; color: #ffffff; }
+.tile b { font: 800 34px/1 var(--font-display); }
+.tile span { color: var(--muted); font-size: 15px; line-height: 1.25; }
+.ic.c1 { background: var(--teal); } .ic.c2 { background: var(--grape); } .ic.c3 { background: var(--sky); } .ic.c4 { background: var(--sun); }
+.acc-note { grid-column: 1 / -1; display: flex; flex-wrap: wrap; gap: 10px; align-items: center; justify-content: center; color: var(--muted); font-size: 15px; }
+.acc-note .pill { text-transform: none; letter-spacing: 0; }
+.tier { display: inline-flex; align-items: center; gap: 5px; border-radius: 999px; padding: 6px 11px 4px; color: #ffffff; font: 800 14px/1 var(--font-display); }
+.tier svg { width: 15px; height: 15px; fill: currentColor; }
+.t-ex { background: var(--leaf); } .t-vg { background: var(--sky); } .t-g { background: var(--sun); color: #0b2e2f; }
+
+/* sign gallery */
+.tabs { display: inline-flex; gap: 8px; padding: 6px; border: 2px solid var(--line); border-radius: 20px; background: var(--surface); }
+.tab { display: inline-flex; align-items: center; gap: 10px; border: 2px solid transparent; border-radius: 14px; background: transparent;
+  padding: 6px 14px 6px 6px; font: 800 17px/1 var(--font-display); color: var(--muted); }
+.tab img { width: 40px; height: 40px; border-radius: 50%; object-fit: cover; background: var(--sun); }
+.tab[data-t="my"] img { background: var(--pink); }
+.tab .n { font-size: 13px; background: var(--line); color: var(--ink); border-radius: 999px; padding: 4px 8px 2px; }
+.tab[aria-selected="true"] { color: var(--ink); border-color: var(--teal); background: var(--teal-soft); }
+.grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-auto-flow: row dense; gap: 26px; }
+.grid.sa .card:first-child { grid-column: 1 / -1; }
+.card { background: var(--surface); border: 2px solid var(--line); border-radius: 24px; overflow: hidden; box-shadow: 0 5px 0 var(--line); min-width: 0; }
+.media { position: relative; aspect-ratio: 16 / 9; background: #0f141a; max-width: 100%; }
+.card[data-mode="c"] { grid-column: 1 / -1; }
+.card[data-mode="c"] .media { aspect-ratio: 8 / 3; }
+.media video { width: 100%; height: 100%; display: block; object-fit: cover; }
+.play { position: absolute; inset: 0; margin: auto; width: clamp(48px, 13%, 72px); height: auto; aspect-ratio: 1; border-radius: 50%; border: 0; background: #ffffff;
+  box-shadow: 0 5px 0 rgba(0, 0, 0, .25); display: grid; place-items: center; transition: opacity .2s, transform .1s; }
+.play svg { width: 48%; height: 48%; fill: var(--teal); }
+.play svg + svg { display: none; }
+.card.playing .play { opacity: 0; } .card.playing .media:hover .play, .card.playing .play:focus-visible { opacity: 1; }
+.card.playing .play svg { display: none; } .card.playing .play svg + svg { display: block; }
+.play:active { transform: translateY(3px); }
+.seg { display: flex; background: var(--bg-soft); border: 2px solid var(--line); border-radius: 14px; padding: 3px; gap: 3px; }
+.seg button { border: 0; background: transparent; color: var(--muted); border-radius: 10px; padding: 9px 12px 7px; font: 800 13.5px/1 var(--font-display);
+  letter-spacing: .04em; text-transform: uppercase; white-space: nowrap; }
+.seg button.on { background: var(--teal); color: #ffffff; box-shadow: 0 3px 0 var(--teal-lip); }
+.slow { position: absolute; top: 10px; inset-inline-end: 10px; width: 38px; height: 38px; border-radius: 12px; border: 0; background: #ffffff;
+  display: grid; place-items: center; box-shadow: 0 3px 0 rgba(0, 0, 0, .2); }
+.slow svg { width: 24px; height: 24px; fill: #4b5d5e; color: #4b5d5e; }
+.slow[aria-pressed="true"] { background: var(--sun); }
+.info { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; gap: 12px 16px; align-items: center; padding: 16px 18px 18px; }
+@media (max-width: 520px) { .info { grid-template-columns: auto minmax(0, 1fr); } .info .seg { grid-column: 1 / -1; justify-self: start; } }
+.score { position: relative; width: 54px; height: 54px; display: grid; place-items: center; }
+.score .ring { position: absolute; inset: 0; }
+.score b { font: 800 17px/1 var(--font-display); } .score b small { font-size: .65em; }
+.info h3 { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.kind { font: 700 13px/1 var(--font-display); color: var(--muted); text-transform: uppercase; letter-spacing: .06em; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 8px; }
+.chips > span:not(.tier) { border: 2px solid var(--line); border-radius: 999px; padding: 4px 10px 2px; font: 700 13.5px/1.3 var(--font-display); color: var(--ink); }
+.chips i { font-style: normal; color: var(--muted); }
+.grid[hidden] { display: none; }
+
+/* footer */
+footer { background: var(--stage); color: #eaf6f6; }
+footer .wrap { display: grid; grid-template-columns: auto 1fr; gap: 18px 28px; align-items: center; padding-block: 44px; }
+footer img { height: 64px; width: auto; }
+footer b { font: 800 26px/1.1 "Baloo 2", "Baloo Bhaijaan 2", system-ui, sans-serif; display: block; }
+footer p { color: #9fc0c1; font-size: 14px; }
+footer .fine { grid-column: 1 / -1; border-top: 2px solid rgba(255, 255, 255, .12); padding-top: 16px; display: grid; gap: 6px; }
+footer .fine p { margin: 0; }
+footer .rights { color: #ffffff; font-weight: 800; font-size: 15px; }
+footer .rights bdi { color: var(--sun); }
+footer .fine a { color: #ffffff; text-decoration: underline; text-decoration-color: rgba(255, 255, 255, .45); text-underline-offset: 3px; }
+
+/* contact */
+.contact { position: relative; overflow: hidden; display: grid; justify-items: center; gap: 14px; text-align: center;
+  background: var(--grape); color: #ffffff; border-radius: 32px; padding: 46px 24px 42px; box-shadow: 0 8px 0 var(--grape-lip); }
+.contact::before, .contact::after { content: ""; position: absolute; border-radius: 50%; }
+.contact::before { width: 280px; aspect-ratio: 1; background: var(--sun); left: -110px; bottom: -150px; }
+.contact::after { width: 210px; aspect-ratio: 1; background: var(--pink); right: -80px; top: -90px; }
+.contact > * { position: relative; z-index: 1; }
+.contact p { color: #ffffff; font-size: 19px; font-weight: 700; opacity: .92; }
+.faces { display: flex; }
+.faces img { width: 78px; height: 78px; border-radius: 50%; border: 4px solid #ffffff; background: #ffffff; }
+.faces img + img { margin-inline-start: -16px; }
+.ct-actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px; margin-top: 10px; }
+.btn.mail { background: #ffffff; color: var(--grape-lip); box-shadow: 0 5px 0 rgba(0, 0, 0, .22); text-transform: none; letter-spacing: 0; font-size: 18px; }
+.btn.mail:active, .btn.copy:active { box-shadow: 0 0 0 transparent; }
+.btn.copy { background: transparent; color: #ffffff; border: 2px solid rgba(255, 255, 255, .75); box-shadow: 0 5px 0 rgba(0, 0, 0, .16); }
+
+/* phone */
+.tabbar { display: none; }
+@media (max-width: 900px) {
+  .hero .wrap, .acc { grid-template-columns: minmax(0, 1fr); }
+  .hero .wrap { padding-block: 28px 44px; gap: 28px; }
+  .avatars, .grid { grid-template-columns: minmax(0, 1fr); }
+  .grid.sa .card:first-child { grid-column: auto; }
+}
+@media (max-width: 720px) {
+  .nav { display: none; }
+  .lang { margin-inline-start: auto; }
+  .steps { grid-template-columns: minmax(0, 1fr); gap: 28px; }
+  .steps li + li::before { display: none; }
+  .tiles { grid-template-columns: minmax(0, 1fr); }
+  .char .top-art { height: 300px; }
+  .sec { padding-block: 52px; }
+  body { padding-bottom: calc(74px + env(safe-area-inset-bottom, 0px)); }
+  .tabbar { display: flex; position: fixed; left: 0; right: 0; bottom: 0; z-index: 9; background: var(--surface); border-top: 2px solid var(--line);
+    padding: 8px max(16px, env(safe-area-inset-right, 0px)) calc(8px + env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px));
+    justify-content: space-around; }
+  .tabbar a { display: grid; justify-items: center; gap: 2px; text-decoration: none; color: var(--muted); font: 800 12px/1 var(--font-display);
+    padding: 6px 10px; border-radius: 12px; }
+  .tabbar svg { width: 26px; height: 26px; fill: currentColor; }
+  .tabbar a:active { background: var(--teal-soft); color: var(--teal); }
+  footer .wrap { grid-template-columns: minmax(0, 1fr); }
+  .contact::before { width: 200px; left: -100px; bottom: -120px; }
+  .contact::after { width: 150px; right: -60px; top: -70px; }
+}
+@media (max-width: 420px) { .float.ex { top: auto; bottom: 24%; right: 4%; } .bubble { padding: 9px 12px; } }
+</style>
+<style>[hidden] { display: none !important; }</style>
+</head>
+<body>
+<header class="top">
+  <div class="wrap">
+    <a class="brand" href="#home" aria-label="Bayyina">
+      <img class="logo-l" src="img/logo-ink.png" alt="Bayyina logo">
+      <img class="logo-d" src="img/logo-white.png" alt="Bayyina logo">
+      <span data-en="Bayyina" data-ar="بيّنا">Bayyina</span>
+    </a>
+    <nav class="nav" aria-label="Sections">
+      <a href="#avatars" data-en="Avatars" data-ar="الأفاتار">Avatars</a>
+      <a href="#accuracy" data-en="Accuracy" data-ar="الدقة">Accuracy</a>
+      <a href="#signs" data-en="Signs" data-ar="الإشارات">Signs</a>
+      <a href="#contact" data-en="Contact" data-ar="تواصل">Contact</a>
+    </nav>
+    <button class="lang" type="button" id="lang-toggle" data-en="عربي" data-ar="EN" aria-label="Change language">عربي</button>
+  </div>
+</header>
+
+<main id="home">
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-copy">
+        <div class="chip-row">
+          <span class="pill"><span class="dot" style="background: var(--sun)"></span><span data-en="Saudi" data-ar="السعودية">Saudi</span></span>
+          <span class="pill"><span class="dot" style="background: var(--pink)"></span><span data-en="Malaysian" data-ar="الماليزية">Malaysian</span></span>
+        </div>
+        <h1><span data-en="Your voice," data-ar="صوتك…">Your voice,</span> <span class="hl" data-en="in sign language." data-ar="بلغة الإشارة.">in sign language.</span></h1>
+        <p class="lead" data-en="Bayyina avatars sign every word, clearly and on time." data-ar="أفاتارات بيّنا تؤدي كل كلمة بالإشارة، بوضوح وفي وقتها.">Bayyina avatars sign every word, clearly and on time.</p>
+        <div class="cta">
+          <a class="btn" href="#signs"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg><span data-en="Watch the signs" data-ar="شاهد الإشارات">Watch the signs</span></a>
+          <a class="btn ghost" href="#avatars"><span data-en="Meet the avatars" data-ar="تعرّف على الأفاتار">Meet the avatars</span></a>
+        </div>
+      </div>
+      <div class="stage" role="img" aria-label="The Saudi and the Malaysian Bayyina avatars">
+        <span class="b1"></span><span class="b2"></span><span class="b3"></span><span class="b4"></span>
+        <img class="av sa" src="img/avatar-sa.webp" alt="">
+        <img class="av my" src="img/avatar-my.webp" alt="">
+        <div class="bubble"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8.5" y="2.5" width="7" height="12" rx="3.5"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M12 17.5v3.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg><span class="bars"><i></i><i></i><i></i><i></i><i></i></span></div>
+        <span class="float ex"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 16.8l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></svg><span data-en="Excellent accuracy" data-ar="دقة ممتازة">Excellent accuracy</span></span>
+        <span class="float tm"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13" r="8" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M12 9v4.4l2.8 1.8M9.5 2.8h5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg><span data-en="Same-frame timing" data-ar="نفس التوقيت">Same-frame timing</span></span>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec soft" aria-labelledby="how-h">
+    <div class="wrap">
+      <div class="sec-head"><h2 id="how-h" data-en="How it works" data-ar="كيف تعمل بيّنا">How it works</h2></div>
+      <ol class="steps">
+        <li><span class="bubble-ic s1"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="8.5" y="2.5" width="7" height="12" rx="3.5"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/><path d="M12 17.5v3.5" stroke="currentColor" stroke-width="2.2" stroke-linecap="round"/></svg><b>1</b></span><h3 data-en="Speak" data-ar="تكلّم">Speak</h3>
+          <p data-en="Say it or type it." data-ar="قلها أو اكتبها.">Say it or type it.</p></li>
+        <li><span class="bubble-ic s2"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.5 12V5.2a1.6 1.6 0 0 1 3.2 0V11h.6V3.6a1.6 1.6 0 0 1 3.2 0V11h.6V4.8a1.6 1.6 0 0 1 3.2 0v8.7c0 4.4-3 7.9-7 7.9-2.6 0-4.4-1.2-5.8-3.3l-2.6-3.9a1.6 1.6 0 0 1 2.5-2z"/></svg><b>2</b></span><h3 data-en="Bayyina signs" data-ar="بيّنا تؤدي الإشارة">Bayyina signs</h3>
+          <p data-en="An avatar signs it, word by word." data-ar="الأفاتار يؤديها كلمة بكلمة.">An avatar signs it, word by word.</p></li>
+        <li><span class="bubble-ic s3"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 20.5s-8-4.7-8-10.6A4.6 4.6 0 0 1 12 7a4.6 4.6 0 0 1 8 2.9c0 5.9-8 10.6-8 10.6z"/></svg><b>3</b></span><h3 data-en="Everyone understands" data-ar="الكل يفهم">Everyone understands</h3>
+          <p data-en="Clear for Deaf and hearing people." data-ar="واضحة للصم والسامعين.">Clear for Deaf and hearing people.</p></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="sec" id="avatars" aria-labelledby="av-h">
+    <div class="wrap">
+      <div class="sec-head"><h2 id="av-h" data-en="Meet the avatars" data-ar="تعرّف على الأفاتار">Meet the avatars</h2></div>
+      <div class="avatars">
+        <article class="char sa">
+          <div class="top-art"><img src="img/avatar-sa.webp" alt="The Saudi Bayyina avatar"></div>
+          <div class="body">
+            <h3 data-en="Saudi" data-ar="السعودي">Saudi</h3>
+            <p data-en="Saudi Sign Language" data-ar="لغة الإشارة السعودية">Saudi Sign Language</p>
+            <div class="stats-mini"><span>5 <i data-en="signs" data-ar="إشارات">signs</i></span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 16.8l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></svg>5 <i data-en="Excellent" data-ar="ممتازة">Excellent</i></span></div>
+            <a class="btn" href="#signs" data-go="sa"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg><span data-en="Watch" data-ar="شاهد">Watch</span></a>
+          </div>
+        </article>
+        <article class="char my">
+          <div class="top-art"><img src="img/avatar-my.webp" alt="The Malaysian Bayyina avatar"></div>
+          <div class="body">
+            <h3 data-en="Malaysian" data-ar="الماليزي">Malaysian</h3>
+            <p data-en="Malaysian Sign Language (BIM)" data-ar="لغة الإشارة الماليزية (BIM)">Malaysian Sign Language (BIM)</p>
+            <div class="stats-mini"><span>10 <i data-en="signs" data-ar="إشارات">signs</i></span><span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 16.8l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></svg>9 <i data-en="Excellent" data-ar="ممتازة">Excellent</i></span></div>
+            <a class="btn" href="#signs" data-go="my"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg><span data-en="Watch" data-ar="شاهد">Watch</span></a>
+          </div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec soft" id="accuracy" aria-labelledby="acc-h">
+    <div class="wrap">
+      <div class="sec-head"><h2 id="acc-h" data-en="How accurate?" data-ar="كم الدقة؟">How accurate?</h2>
+        <p data-en="Every sign compared with the original signer, frame by frame." data-ar="كل إشارة تمت مقارنتها بالمؤدي الأصلي، فريم بفريم.">Every sign compared with the original signer, frame by frame.</p></div>
+      <div class="acc">
+        <div class="gauge">
+          <svg class="ring big" viewBox="0 0 220 220" width="220" height="220" aria-hidden="true"><circle cx="110.0" cy="110.0" r="99.00" class="ring-bg" stroke-width="22"/><circle cx="110.0" cy="110.0" r="99.00" class="ring-fg" stroke-width="22" stroke-dasharray="622.0" stroke-dashoffset="11.2" style="--c:622.0;--o:11.2"/></svg>
+          <div class="center"><b>98.2<small>%</small></b><span data-en="Overall match" data-ar="التطابق العام">Overall match</span>
+            <span class="tier t-ex badge"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 16.8l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></svg><i data-en="Excellent" data-ar="ممتاز">Excellent</i></span></div>
+        </div>
+        <div class="tiles">
+          <div class="tile"><span class="ic c1"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M2.5 12c2.4 0 2.4-6 4.8-6s2.4 12 4.8 12 2.4-12 4.8-12 2.4 6 4.6 6" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/></svg></span><b>0.99</b><span data-en="Movement match" data-ar="تطابق الحركة">Movement match</span></div>
+          <div class="tile"><span class="ic c2"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7.5 12V5.2a1.6 1.6 0 0 1 3.2 0V11h.6V3.6a1.6 1.6 0 0 1 3.2 0V11h.6V4.8a1.6 1.6 0 0 1 3.2 0v8.7c0 4.4-3 7.9-7 7.9-2.6 0-4.4-1.2-5.8-3.3l-2.6-3.9a1.6 1.6 0 0 1 2.5-2z"/></svg></span><b>97%</b><span data-en="Hand shape match" data-ar="تطابق شكل اليد">Hand shape match</span></div>
+          <div class="tile"><span class="ic c3"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="13" r="8" fill="none" stroke="currentColor" stroke-width="2.4"/><path d="M12 9v4.4l2.8 1.8M9.5 2.8h5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></span><b>14/15</b><span data-en="On the same frame" data-ar="على نفس الفريم">On the same frame</span></div>
+          <div class="tile"><span class="ic c4"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.5l1.9 6.1 6.1 1.9-6.1 1.9L12 18.5l-1.9-6.1-6.1-1.9 6.1-1.9zM19 15.5l.9 2.6 2.6.9-2.6.9-.9 2.6-.9-2.6-2.6-.9 2.6-.9z"/></svg></span><b>15/15</b><span data-en="Clean, no logos" data-ar="نظيفة بدون شعارات">Clean, no logos</span></div>
+        </div>
+        <p class="acc-note">
+          <span class="pill"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2.4"/><circle cx="12" cy="12" r="4.6" fill="none" stroke="currentColor" stroke-width="2.4"/><circle cx="12" cy="12" r="1.6"/></svg><span data-en="YOLO body tracking + 21 points per hand" data-ar="تتبّع YOLO للجسم + 21 نقطة لكل يد">YOLO body tracking + 21 points per hand</span></span>
+          <span class="tier t-ex"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 16.8l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></svg><i data-en="Excellent = movement 0.98+ and hand shape 90%+" data-ar="ممتاز = حركة 0.98+ وشكل يد 90%+">Excellent = movement 0.98+ and hand shape 90%+</i></span>
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="signs" aria-labelledby="sg-h">
+    <div class="wrap">
+      <div class="sec-head">
+        <h2 id="sg-h" data-en="The signs" data-ar="الإشارات">The signs</h2>
+        <div class="tabs" role="tablist" aria-label="Avatar">
+          <button class="tab" type="button" role="tab" id="tab-sa" data-t="sa" aria-selected="true" aria-controls="grid-sa"><img src="img/face-sa.png" alt=""><span data-en="Saudi" data-ar="السعودي">Saudi</span><span class="n">5</span></button>
+          <button class="tab" type="button" role="tab" id="tab-my" data-t="my" aria-selected="false" aria-controls="grid-my"><img src="img/face-my.png" alt=""><span data-en="Malaysian" data-ar="الماليزي">Malaysian</span><span class="n">10</span></button>
+        </div>
+      </div>
+      <div class="grid sa" id="grid-sa" role="tabpanel" aria-labelledby="tab-sa">
+      <article class="card sign" id="sa-salam" data-mode="a">
+        <div class="media">
+          <video data-a="v/a/sa-salam.mp4" data-c="v/c/sa-salam.mp4" data-pa="p/sa-salam-a.jpg" data-pc="p/sa-salam-c.jpg"
+                 src="v/a/sa-salam.mp4" poster="p/sa-salam-a.jpg" muted loop playsinline preload="none"></video>
+          <button class="play" type="button" aria-label="Play As-salamu alaykum"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4.5" height="14" rx="1.5"/><rect x="13.5" y="5" width="4.5" height="14" rx="1.5"/></svg></button>
+          <button class="slow" type="button" aria-pressed="false" aria-label="Slow motion" title="0.5×"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 16.5c0-4.4 3.6-8 8-8s8 3.6 8 8z"/><circle cx="20.5" cy="13" r="1.8"/><path d="M6.5 17.5v2M17.5 17.5v2" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
+        </div>
+        <div class="info">
+          <div class="score"><svg class="ring " viewBox="0 0 54 54" width="54" height="54" aria-hidden="true"><circle cx="27.0" cy="27.0" r="23.50" class="ring-bg" stroke-width="7"/><circle cx="27.0" cy="27.0" r="23.50" class="ring-fg" stroke-width="7" stroke-dasharray="147.7" stroke-dashoffset="0.4" style="--c:147.7;--o:0.4"/></svg><b>100<small>%</small></b></div>
+          <div class="txt">
+            <h3><span data-en="As-salamu alaykum" data-ar="السلام عليكم">As-salamu alaykum</span></h3>
+            <p class="chips">
+              <span class="tier t-ex"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 16.8l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></svg><i data-en="Excellent" data-ar="ممتاز">Excellent</i></span>
+              <span><i data-en="Movement" data-ar="الحركة">Movement</i> 0.99</span>
+              <span><i data-en="Hand" data-ar="اليد">Hand</i> 100%</span>
+              <span data-en="Same frame" data-ar="نفس الفريم">Same frame</span>
+            </p>
+          </div>
+          <div class="seg" role="group" aria-label="View">
+            <button type="button" class="on" data-m="a" aria-pressed="true" data-en="Avatar" data-ar="الأفاتار">Avatar</button>
+            <button type="button" data-m="c" aria-pressed="false" data-en="Compare" data-ar="مقارنة">Compare</button>
+          </div>
+        </div>
+      </article>
+      <article class="card sign" id="sa-22" data-mode="a">
+        <div class="media">
+          <video data-a="v/a/sa-22.mp4" data-c="v/c/sa-22.mp4" data-pa="p/sa-22-a.jpg" data-pc="p/sa-22-c.jpg"
+                 src="v/a/sa-22.mp4" poster="p/sa-22-a.jpg" muted loop playsinline preload="none"></video>
+          <button class="play" type="button" aria-label="Play 22"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4.5" height="14" rx="1.5"/><rect x="13.5" y="5" width="4.5" height="14" rx="1.5"/></svg></button>
+          <button class="slow" type="button" aria-pressed="false" aria-label="Slow motion" title="0.5×"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 16.5c0-4.4 3.6-8 8-8s8 3.6 8 8z"/><circle cx="20.5" cy="13" r="1.8"/><path d="M6.5 17.5v2M17.5 17.5v2" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
+        </div>
+        <div class="info">
+          <div class="score"><svg class="ring " viewBox="0 0 54 54" width="54" height="54" aria-hidden="true"><circle cx="27.0" cy="27.0" r="23.50" class="ring-bg" stroke-width="7"/><circle cx="27.0" cy="27.0" r="23.50" class="ring-fg" stroke-width="7" stroke-dasharray="147.7" stroke-dashoffset="1.2" style="--c:147.7;--o:1.2"/></svg><b>99<small>%</small></b></div>
+          <div class="txt">
+            <h3><span data-en="22" data-ar="٢٢">22</span><span class="kind" data-en="Number" data-ar="رقم">Number</span></h3>
+            <p class="chips">
+              <span class="tier t-ex"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 16.8l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></svg><i data-en="Excellent" data-ar="ممتاز">Excellent</i></span>
+              <span><i data-en="Movement" data-ar="الحركة">Movement</i> 0.98</span>
+              <span><i data-en="Hand" data-ar="اليد">Hand</i> 100%</span>
+              <span data-en="Same frame" data-ar="نفس الفريم">Same frame</span>
+            </p>
+          </div>
+          <div class="seg" role="group" aria-label="View">
+            <button type="button" class="on" data-m="a" aria-pressed="true" data-en="Avatar" data-ar="الأفاتار">Avatar</button>
+            <button type="button" data-m="c" aria-pressed="false" data-en="Compare" data-ar="مقارنة">Compare</button>
+          </div>
+        </div>
+      </article>
+      <article class="card sign" id="sa-33" data-mode="a">
+        <div class="media">
+          <video data-a="v/a/sa-33.mp4" data-c="v/c/sa-33.mp4" data-pa="p/sa-33-a.jpg" data-pc="p/sa-33-c.jpg"
+                 src="v/a/sa-33.mp4" poster="p/sa-33-a.jpg" muted loop playsinline preload="none"></video>
+          <button class="play" type="button" aria-label="Play 33"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4.5" height="14" rx="1.5"/><rect x="13.5" y="5" width="4.5" height="14" rx="1.5"/></svg></button>
+          <button class="slow" type="button" aria-pressed="false" aria-label="Slow motion" title="0.5×"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 16.5c0-4.4 3.6-8 8-8s8 3.6 8 8z"/><circle cx="20.5" cy="13" r="1.8"/><path d="M6.5 17.5v2M17.5 17.5v2" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
+        </div>
+        <div class="info">
+          <div class="score"><svg class="ring " viewBox="0 0 54 54" width="54" height="54" aria-hidden="true"><circle cx="27.0" cy="27.0" r="23.50" class="ring-bg" stroke-width="7"/><circle cx="27.0" cy="27.0" r="23.50" class="ring-fg" stroke-width="7" stroke-dasharray="147.7" stroke-dashoffset="0.7" style="--c:147.7;--o:0.7"/></svg><b>100<small>%</small></b></div>
+          <div class="txt">
+            <h3><span data-en="33" data-ar="٣٣">33</span><span class="kind" data-en="Number" data-ar="رقم">Number</span></h3>
+            <p class="chips">
+              <span class="tier t-ex"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 16.8l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></svg><i data-en="Excellent" data-ar="ممتاز">Excellent</i></span>
+              <span><i data-en="Movement" data-ar="الحركة">Movement</i> 0.98</span>
+              <span><i data-en="Hand" data-ar="اليد">Hand</i> 100%</span>
+              <span data-en="Same frame" data-ar="نفس الفريم">Same frame</span>
+            </p>
+          </div>
+          <div class="seg" role="group" aria-label="View">
+            <button type="button" class="on" data-m="a" aria-pressed="true" data-en="Avatar" data-ar="الأفاتار">Avatar</button>
+            <button type="button" data-m="c" aria-pressed="false" data-en="Compare" data-ar="مقارنة">Compare</button>
+          </div>
+        </div>
+      </article>
+      <article class="card sign" id="sa-44" data-mode="a">
+        <div class="media">
+          <video data-a="v/a/sa-44.mp4" data-c="v/c/sa-44.mp4" data-pa="p/sa-44-a.jpg" data-pc="p/sa-44-c.jpg"
+                 src="v/a/sa-44.mp4" poster="p/sa-44-a.jpg" muted loop playsinline preload="none"></video>
+          <button class="play" type="button" aria-label="Play 44"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4.5" height="14" rx="1.5"/><rect x="13.5" y="5" width="4.5" height="14" rx="1.5"/></svg></button>
+          <button class="slow" type="button" aria-pressed="false" aria-label="Slow motion" title="0.5×"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 16.5c0-4.4 3.6-8 8-8s8 3.6 8 8z"/><circle cx="20.5" cy="13" r="1.8"/><path d="M6.5 17.5v2M17.5 17.5v2" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
+        </div>
+        <div class="info">
+          <div class="score"><svg class="ring " viewBox="0 0 54 54" width="54" height="54" aria-hidden="true"><circle cx="27.0" cy="27.0" r="23.50" class="ring-bg" stroke-width="7"/><circle cx="27.0" cy="27.0" r="23.50" class="ring-fg" stroke-width="7" stroke-dasharray="147.7" stroke-dashoffset="3.7" style="--c:147.7;--o:3.7"/></svg><b>98<small>%</small></b></div>
+          <div class="txt">
+            <h3><span data-en="44" data-ar="٤٤">44</span><span class="kind" data-en="Number" data-ar="رقم">Number</span></h3>
+            <p class="chips">
+              <span class="tier t-ex"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 16.8l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></svg><i data-en="Excellent" data-ar="ممتاز">Excellent</i></span>
+              <span><i data-en="Movement" data-ar="الحركة">Movement</i> 0.99</span>
+              <span><i data-en="Hand" data-ar="اليد">Hand</i> 96%</span>
+              <span data-en="Same frame" data-ar="نفس الفريم">Same frame</span>
+            </p>
+          </div>
+          <div class="seg" role="group" aria-label="View">
+            <button type="button" class="on" data-m="a" aria-pressed="true" data-en="Avatar" data-ar="الأفاتار">Avatar</button>
+            <button type="button" data-m="c" aria-pressed="false" data-en="Compare" data-ar="مقارنة">Compare</button>
+          </div>
+        </div>
+      </article>
+      <article class="card sign" id="sa-80" data-mode="a">
+        <div class="media">
+          <video data-a="v/a/sa-80.mp4" data-c="v/c/sa-80.mp4" data-pa="p/sa-80-a.jpg" data-pc="p/sa-80-c.jpg"
+                 src="v/a/sa-80.mp4" poster="p/sa-80-a.jpg" muted loop playsinline preload="none"></video>
+          <button class="play" type="button" aria-label="Play 80"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4.5" height="14" rx="1.5"/><rect x="13.5" y="5" width="4.5" height="14" rx="1.5"/></svg></button>
+          <button class="slow" type="button" aria-pressed="false" aria-label="Slow motion" title="0.5×"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 16.5c0-4.4 3.6-8 8-8s8 3.6 8 8z"/><circle cx="20.5" cy="13" r="1.8"/><path d="M6.5 17.5v2M17.5 17.5v2" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
+        </div>
+        <div class="info">
+          <div class="score"><svg class="ring " viewBox="0 0 54 54" width="54" height="54" aria-hidden="true"><circle cx="27.0" cy="27.0" r="23.50" class="ring-bg" stroke-width="7"/><circle cx="27.0" cy="27.0" r="23.50" class="ring-fg" stroke-width="7" stroke-dasharray="147.7" stroke-dashoffset="5.8" style="--c:147.7;--o:5.8"/></svg><b>96<small>%</small></b></div>
+          <div class="txt">
+            <h3><span data-en="80" data-ar="٨٠">80</span><span class="kind" data-en="Number" data-ar="رقم">Number</span></h3>
+            <p class="chips">
+              <span class="tier t-ex"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 16.8l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></svg><i data-en="Excellent" data-ar="ممتاز">Excellent</i></span>
+              <span><i data-en="Movement" data-ar="الحركة">Movement</i> 0.98</span>
+              <span><i data-en="Hand" data-ar="اليد">Hand</i> 93%</span>
+              <span data-en="Same frame" data-ar="نفس الفريم">Same frame</span>
+            </p>
+          </div>
+          <div class="seg" role="group" aria-label="View">
+            <button type="button" class="on" data-m="a" aria-pressed="true" data-en="Avatar" data-ar="الأفاتار">Avatar</button>
+            <button type="button" data-m="c" aria-pressed="false" data-en="Compare" data-ar="مقارنة">Compare</button>
+          </div>
+        </div>
+      </article>
+      </div>
+      <div class="grid my" id="grid-my" role="tabpanel" aria-labelledby="tab-my" hidden>
+      <article class="card sign" id="my-doctor" data-mode="a">
+        <div class="media">
+          <video data-a="v/a/my-doctor.mp4" data-c="v/c/my-doctor.mp4" data-pa="p/my-doctor-a.jpg" data-pc="p/my-doctor-c.jpg"
+                 src="v/a/my-doctor.mp4" poster="p/my-doctor-a.jpg" muted loop playsinline preload="none"></video>
+          <button class="play" type="button" aria-label="Play Doctor"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4.5" height="14" rx="1.5"/><rect x="13.5" y="5" width="4.5" height="14" rx="1.5"/></svg></button>
+          <button class="slow" type="button" aria-pressed="false" aria-label="Slow motion" title="0.5×"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 16.5c0-4.4 3.6-8 8-8s8 3.6 8 8z"/><circle cx="20.5" cy="13" r="1.8"/><path d="M6.5 17.5v2M17.5 17.5v2" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
+        </div>
+        <div class="info">
+          <div class="score"><svg class="ring " viewBox="0 0 54 54" width="54" height="54" aria-hidden="true"><circle cx="27.0" cy="27.0" r="23.50" class="ring-bg" stroke-width="7"/><circle cx="27.0" cy="27.0" r="23.50" class="ring-fg" stroke-width="7" stroke-dasharray="147.7" stroke-dashoffset="0.6" style="--c:147.7;--o:0.6"/></svg><b>100<small>%</small></b></div>
+          <div class="txt">
+            <h3><span data-en="Doctor" data-ar="طبيب">Doctor</span></h3>
+            <p class="chips">
+              <span class="tier t-ex"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 16.8l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></svg><i data-en="Excellent" data-ar="ممتاز">Excellent</i></span>
+              <span><i data-en="Movement" data-ar="الحركة">Movement</i> 0.99</span>
+              <span><i data-en="Hand" data-ar="اليد">Hand</i> 100%</span>
+              <span data-en="Same frame" data-ar="نفس الفريم">Same frame</span>
+            </p>
+          </div>
+          <div class="seg" role="group" aria-label="View">
+            <button type="button" class="on" data-m="a" aria-pressed="true" data-en="Avatar" data-ar="الأفاتار">Avatar</button>
+            <button type="button" data-m="c" aria-pressed="false" data-en="Compare" data-ar="مقارنة">Compare</button>
+          </div>
+        </div>
+      </article>
+      <article class="card sign" id="my-friday" data-mode="a">
+        <div class="media">
+          <video data-a="v/a/my-friday.mp4" data-c="v/c/my-friday.mp4" data-pa="p/my-friday-a.jpg" data-pc="p/my-friday-c.jpg"
+                 src="v/a/my-friday.mp4" poster="p/my-friday-a.jpg" muted loop playsinline preload="none"></video>
+          <button class="play" type="button" aria-label="Play Friday"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4.5" height="14" rx="1.5"/><rect x="13.5" y="5" width="4.5" height="14" rx="1.5"/></svg></button>
+          <button class="slow" type="button" aria-pressed="false" aria-label="Slow motion" title="0.5×"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 16.5c0-4.4 3.6-8 8-8s8 3.6 8 8z"/><circle cx="20.5" cy="13" r="1.8"/><path d="M6.5 17.5v2M17.5 17.5v2" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
+        </div>
+        <div class="info">
+          <div class="score"><svg class="ring " viewBox="0 0 54 54" width="54" height="54" aria-hidden="true"><circle cx="27.0" cy="27.0" r="23.50" class="ring-bg" stroke-width="7"/><circle cx="27.0" cy="27.0" r="23.50" class="ring-fg" stroke-width="7" stroke-dasharray="147.7" stroke-dashoffset="1.0" style="--c:147.7;--o:1.0"/></svg><b>99<small>%</small></b></div>
+          <div class="txt">
+            <h3><span data-en="Friday" data-ar="الجمعة">Friday</span></h3>
+            <p class="chips">
+              <span class="tier t-ex"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 16.8l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></svg><i data-en="Excellent" data-ar="ممتاز">Excellent</i></span>
+              <span><i data-en="Movement" data-ar="الحركة">Movement</i> 0.98</span>
+              <span><i data-en="Hand" data-ar="اليد">Hand</i> 100%</span>
+              <span data-en="1 frame early" data-ar="أسرع بفريم">1 frame early</span>
+            </p>
+          </div>
+          <div class="seg" role="group" aria-label="View">
+            <button type="button" class="on" data-m="a" aria-pressed="true" data-en="Avatar" data-ar="الأفاتار">Avatar</button>
+            <button type="button" data-m="c" aria-pressed="false" data-en="Compare" data-ar="مقارنة">Compare</button>
+          </div>
+        </div>
+      </article>
+      <article class="card sign" id="my-going-home" data-mode="a">
+        <div class="media">
+          <video data-a="v/a/my-going-home.mp4" data-c="v/c/my-going-home.mp4" data-pa="p/my-going-home-a.jpg" data-pc="p/my-going-home-c.jpg"
+                 src="v/a/my-going-home.mp4" poster="p/my-going-home-a.jpg" muted loop playsinline preload="none"></video>
+          <button class="play" type="button" aria-label="Play Going home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4.5" height="14" rx="1.5"/><rect x="13.5" y="5" width="4.5" height="14" rx="1.5"/></svg></button>
+          <button class="slow" type="button" aria-pressed="false" aria-label="Slow motion" title="0.5×"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 16.5c0-4.4 3.6-8 8-8s8 3.6 8 8z"/><circle cx="20.5" cy="13" r="1.8"/><path d="M6.5 17.5v2M17.5 17.5v2" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
+        </div>
+        <div class="info">
+          <div class="score"><svg class="ring " viewBox="0 0 54 54" width="54" height="54" aria-hidden="true"><circle cx="27.0" cy="27.0" r="23.50" class="ring-bg" stroke-width="7"/><circle cx="27.0" cy="27.0" r="23.50" class="ring-fg" stroke-width="7" stroke-dasharray="147.7" stroke-dashoffset="0.4" style="--c:147.7;--o:0.4"/></svg><b>100<small>%</small></b></div>
+          <div class="txt">
+            <h3><span data-en="Going home" data-ar="الرجوع للبيت">Going home</span></h3>
+            <p class="chips">
+              <span class="tier t-ex"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 16.8l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></svg><i data-en="Excellent" data-ar="ممتاز">Excellent</i></span>
+              <span><i data-en="Movement" data-ar="الحركة">Movement</i> 0.99</span>
+              <span><i data-en="Hand" data-ar="اليد">Hand</i> 100%</span>
+              <span data-en="Same frame" data-ar="نفس الفريم">Same frame</span>
+            </p>
+          </div>
+          <div class="seg" role="group" aria-label="View">
+            <button type="button" class="on" data-m="a" aria-pressed="true" data-en="Avatar" data-ar="الأفاتار">Avatar</button>
+            <button type="button" data-m="c" aria-pressed="false" data-en="Compare" data-ar="مقارنة">Compare</button>
+          </div>
+        </div>
+      </article>
+      <article class="card sign" id="my-graduate" data-mode="a">
+        <div class="media">
+          <video data-a="v/a/my-graduate.mp4" data-c="v/c/my-graduate.mp4" data-pa="p/my-graduate-a.jpg" data-pc="p/my-graduate-c.jpg"
+                 src="v/a/my-graduate.mp4" poster="p/my-graduate-a.jpg" muted loop playsinline preload="none"></video>
+          <button class="play" type="button" aria-label="Play Graduate"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4.5" height="14" rx="1.5"/><rect x="13.5" y="5" width="4.5" height="14" rx="1.5"/></svg></button>
+          <button class="slow" type="button" aria-pressed="false" aria-label="Slow motion" title="0.5×"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 16.5c0-4.4 3.6-8 8-8s8 3.6 8 8z"/><circle cx="20.5" cy="13" r="1.8"/><path d="M6.5 17.5v2M17.5 17.5v2" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
+        </div>
+        <div class="info">
+          <div class="score"><svg class="ring vg" viewBox="0 0 54 54" width="54" height="54" aria-hidden="true"><circle cx="27.0" cy="27.0" r="23.50" class="ring-bg" stroke-width="7"/><circle cx="27.0" cy="27.0" r="23.50" class="ring-fg" stroke-width="7" stroke-dasharray="147.7" stroke-dashoffset="9.9" style="--c:147.7;--o:9.9"/></svg><b>93<small>%</small></b></div>
+          <div class="txt">
+            <h3><span data-en="Graduate" data-ar="خرّيج">Graduate</span></h3>
+            <p class="chips">
+              <span class="tier t-vg"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 16.8l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></svg><i data-en="Very good" data-ar="جيد جدًا">Very good</i></span>
+              <span><i data-en="Movement" data-ar="الحركة">Movement</i> 0.99</span>
+              <span><i data-en="Hand" data-ar="اليد">Hand</i> 88%</span>
+              <span data-en="Same frame" data-ar="نفس الفريم">Same frame</span>
+            </p>
+          </div>
+          <div class="seg" role="group" aria-label="View">
+            <button type="button" class="on" data-m="a" aria-pressed="true" data-en="Avatar" data-ar="الأفاتار">Avatar</button>
+            <button type="button" data-m="c" aria-pressed="false" data-en="Compare" data-ar="مقارنة">Compare</button>
+          </div>
+        </div>
+      </article>
+      <article class="card sign" id="my-just-kidding" data-mode="a">
+        <div class="media">
+          <video data-a="v/a/my-just-kidding.mp4" data-c="v/c/my-just-kidding.mp4" data-pa="p/my-just-kidding-a.jpg" data-pc="p/my-just-kidding-c.jpg"
+                 src="v/a/my-just-kidding.mp4" poster="p/my-just-kidding-a.jpg" muted loop playsinline preload="none"></video>
+          <button class="play" type="button" aria-label="Play Just kidding"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4.5" height="14" rx="1.5"/><rect x="13.5" y="5" width="4.5" height="14" rx="1.5"/></svg></button>
+          <button class="slow" type="button" aria-pressed="false" aria-label="Slow motion" title="0.5×"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 16.5c0-4.4 3.6-8 8-8s8 3.6 8 8z"/><circle cx="20.5" cy="13" r="1.8"/><path d="M6.5 17.5v2M17.5 17.5v2" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
+        </div>
+        <div class="info">
+          <div class="score"><svg class="ring " viewBox="0 0 54 54" width="54" height="54" aria-hidden="true"><circle cx="27.0" cy="27.0" r="23.50" class="ring-bg" stroke-width="7"/><circle cx="27.0" cy="27.0" r="23.50" class="ring-fg" stroke-width="7" stroke-dasharray="147.7" stroke-dashoffset="1.8" style="--c:147.7;--o:1.8"/></svg><b>99<small>%</small></b></div>
+          <div class="txt">
+            <h3><span data-en="Just kidding" data-ar="أمزح فقط">Just kidding</span></h3>
+            <p class="chips">
+              <span class="tier t-ex"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 16.8l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></svg><i data-en="Excellent" data-ar="ممتاز">Excellent</i></span>
+              <span><i data-en="Movement" data-ar="الحركة">Movement</i> 0.99</span>
+              <span><i data-en="Hand" data-ar="اليد">Hand</i> 98%</span>
+              <span data-en="Same frame" data-ar="نفس الفريم">Same frame</span>
+            </p>
+          </div>
+          <div class="seg" role="group" aria-label="View">
+            <button type="button" class="on" data-m="a" aria-pressed="true" data-en="Avatar" data-ar="الأفاتار">Avatar</button>
+            <button type="button" data-m="c" aria-pressed="false" data-en="Compare" data-ar="مقارنة">Compare</button>
+          </div>
+        </div>
+      </article>
+      <article class="card sign" id="my-mom" data-mode="a">
+        <div class="media">
+          <video data-a="v/a/my-mom.mp4" data-c="v/c/my-mom.mp4" data-pa="p/my-mom-a.jpg" data-pc="p/my-mom-c.jpg"
+                 src="v/a/my-mom.mp4" poster="p/my-mom-a.jpg" muted loop playsinline preload="none"></video>
+          <button class="play" type="button" aria-label="Play Mom"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4.5" height="14" rx="1.5"/><rect x="13.5" y="5" width="4.5" height="14" rx="1.5"/></svg></button>
+          <button class="slow" type="button" aria-pressed="false" aria-label="Slow motion" title="0.5×"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 16.5c0-4.4 3.6-8 8-8s8 3.6 8 8z"/><circle cx="20.5" cy="13" r="1.8"/><path d="M6.5 17.5v2M17.5 17.5v2" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
+        </div>
+        <div class="info">
+          <div class="score"><svg class="ring " viewBox="0 0 54 54" width="54" height="54" aria-hidden="true"><circle cx="27.0" cy="27.0" r="23.50" class="ring-bg" stroke-width="7"/><circle cx="27.0" cy="27.0" r="23.50" class="ring-fg" stroke-width="7" stroke-dasharray="147.7" stroke-dashoffset="0.6" style="--c:147.7;--o:0.6"/></svg><b>100<small>%</small></b></div>
+          <div class="txt">
+            <h3><span data-en="Mom" data-ar="أمي">Mom</span></h3>
+            <p class="chips">
+              <span class="tier t-ex"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 16.8l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></svg><i data-en="Excellent" data-ar="ممتاز">Excellent</i></span>
+              <span><i data-en="Movement" data-ar="الحركة">Movement</i> 0.99</span>
+              <span><i data-en="Hand" data-ar="اليد">Hand</i> 100%</span>
+              <span data-en="Same frame" data-ar="نفس الفريم">Same frame</span>
+            </p>
+          </div>
+          <div class="seg" role="group" aria-label="View">
+            <button type="button" class="on" data-m="a" aria-pressed="true" data-en="Avatar" data-ar="الأفاتار">Avatar</button>
+            <button type="button" data-m="c" aria-pressed="false" data-en="Compare" data-ar="مقارنة">Compare</button>
+          </div>
+        </div>
+      </article>
+      <article class="card sign" id="my-president" data-mode="a">
+        <div class="media">
+          <video data-a="v/a/my-president.mp4" data-c="v/c/my-president.mp4" data-pa="p/my-president-a.jpg" data-pc="p/my-president-c.jpg"
+                 src="v/a/my-president.mp4" poster="p/my-president-a.jpg" muted loop playsinline preload="none"></video>
+          <button class="play" type="button" aria-label="Play President"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4.5" height="14" rx="1.5"/><rect x="13.5" y="5" width="4.5" height="14" rx="1.5"/></svg></button>
+          <button class="slow" type="button" aria-pressed="false" aria-label="Slow motion" title="0.5×"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 16.5c0-4.4 3.6-8 8-8s8 3.6 8 8z"/><circle cx="20.5" cy="13" r="1.8"/><path d="M6.5 17.5v2M17.5 17.5v2" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
+        </div>
+        <div class="info">
+          <div class="score"><svg class="ring " viewBox="0 0 54 54" width="54" height="54" aria-hidden="true"><circle cx="27.0" cy="27.0" r="23.50" class="ring-bg" stroke-width="7"/><circle cx="27.0" cy="27.0" r="23.50" class="ring-fg" stroke-width="7" stroke-dasharray="147.7" stroke-dashoffset="7.2" style="--c:147.7;--o:7.2"/></svg><b>95<small>%</small></b></div>
+          <div class="txt">
+            <h3><span data-en="President" data-ar="رئيس">President</span></h3>
+            <p class="chips">
+              <span class="tier t-ex"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 16.8l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></svg><i data-en="Excellent" data-ar="ممتاز">Excellent</i></span>
+              <span><i data-en="Movement" data-ar="الحركة">Movement</i> 0.99</span>
+              <span><i data-en="Hand" data-ar="اليد">Hand</i> 91%</span>
+              <span data-en="Same frame" data-ar="نفس الفريم">Same frame</span>
+            </p>
+          </div>
+          <div class="seg" role="group" aria-label="View">
+            <button type="button" class="on" data-m="a" aria-pressed="true" data-en="Avatar" data-ar="الأفاتار">Avatar</button>
+            <button type="button" data-m="c" aria-pressed="false" data-en="Compare" data-ar="مقارنة">Compare</button>
+          </div>
+        </div>
+      </article>
+      <article class="card sign" id="my-purple" data-mode="a">
+        <div class="media">
+          <video data-a="v/a/my-purple.mp4" data-c="v/c/my-purple.mp4" data-pa="p/my-purple-a.jpg" data-pc="p/my-purple-c.jpg"
+                 src="v/a/my-purple.mp4" poster="p/my-purple-a.jpg" muted loop playsinline preload="none"></video>
+          <button class="play" type="button" aria-label="Play Purple"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4.5" height="14" rx="1.5"/><rect x="13.5" y="5" width="4.5" height="14" rx="1.5"/></svg></button>
+          <button class="slow" type="button" aria-pressed="false" aria-label="Slow motion" title="0.5×"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 16.5c0-4.4 3.6-8 8-8s8 3.6 8 8z"/><circle cx="20.5" cy="13" r="1.8"/><path d="M6.5 17.5v2M17.5 17.5v2" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
+        </div>
+        <div class="info">
+          <div class="score"><svg class="ring " viewBox="0 0 54 54" width="54" height="54" aria-hidden="true"><circle cx="27.0" cy="27.0" r="23.50" class="ring-bg" stroke-width="7"/><circle cx="27.0" cy="27.0" r="23.50" class="ring-fg" stroke-width="7" stroke-dasharray="147.7" stroke-dashoffset="0.6" style="--c:147.7;--o:0.6"/></svg><b>100<small>%</small></b></div>
+          <div class="txt">
+            <h3><span data-en="Purple" data-ar="بنفسجي">Purple</span></h3>
+            <p class="chips">
+              <span class="tier t-ex"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 16.8l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></svg><i data-en="Excellent" data-ar="ممتاز">Excellent</i></span>
+              <span><i data-en="Movement" data-ar="الحركة">Movement</i> 0.99</span>
+              <span><i data-en="Hand" data-ar="اليد">Hand</i> 100%</span>
+              <span data-en="Same frame" data-ar="نفس الفريم">Same frame</span>
+            </p>
+          </div>
+          <div class="seg" role="group" aria-label="View">
+            <button type="button" class="on" data-m="a" aria-pressed="true" data-en="Avatar" data-ar="الأفاتار">Avatar</button>
+            <button type="button" data-m="c" aria-pressed="false" data-en="Compare" data-ar="مقارنة">Compare</button>
+          </div>
+        </div>
+      </article>
+      <article class="card sign" id="my-soya-sauce" data-mode="a">
+        <div class="media">
+          <video data-a="v/a/my-soya-sauce.mp4" data-c="v/c/my-soya-sauce.mp4" data-pa="p/my-soya-sauce-a.jpg" data-pc="p/my-soya-sauce-c.jpg"
+                 src="v/a/my-soya-sauce.mp4" poster="p/my-soya-sauce-a.jpg" muted loop playsinline preload="none"></video>
+          <button class="play" type="button" aria-label="Play Soya sauce"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4.5" height="14" rx="1.5"/><rect x="13.5" y="5" width="4.5" height="14" rx="1.5"/></svg></button>
+          <button class="slow" type="button" aria-pressed="false" aria-label="Slow motion" title="0.5×"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 16.5c0-4.4 3.6-8 8-8s8 3.6 8 8z"/><circle cx="20.5" cy="13" r="1.8"/><path d="M6.5 17.5v2M17.5 17.5v2" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
+        </div>
+        <div class="info">
+          <div class="score"><svg class="ring " viewBox="0 0 54 54" width="54" height="54" aria-hidden="true"><circle cx="27.0" cy="27.0" r="23.50" class="ring-bg" stroke-width="7"/><circle cx="27.0" cy="27.0" r="23.50" class="ring-fg" stroke-width="7" stroke-dasharray="147.7" stroke-dashoffset="1.0" style="--c:147.7;--o:1.0"/></svg><b>99<small>%</small></b></div>
+          <div class="txt">
+            <h3><span data-en="Soya sauce" data-ar="صلصة الصويا">Soya sauce</span></h3>
+            <p class="chips">
+              <span class="tier t-ex"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 16.8l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></svg><i data-en="Excellent" data-ar="ممتاز">Excellent</i></span>
+              <span><i data-en="Movement" data-ar="الحركة">Movement</i> 0.99</span>
+              <span><i data-en="Hand" data-ar="اليد">Hand</i> 99%</span>
+              <span data-en="Same frame" data-ar="نفس الفريم">Same frame</span>
+            </p>
+          </div>
+          <div class="seg" role="group" aria-label="View">
+            <button type="button" class="on" data-m="a" aria-pressed="true" data-en="Avatar" data-ar="الأفاتار">Avatar</button>
+            <button type="button" data-m="c" aria-pressed="false" data-en="Compare" data-ar="مقارنة">Compare</button>
+          </div>
+        </div>
+      </article>
+      <article class="card sign" id="my-very-clear" data-mode="a">
+        <div class="media">
+          <video data-a="v/a/my-very-clear.mp4" data-c="v/c/my-very-clear.mp4" data-pa="p/my-very-clear-a.jpg" data-pc="p/my-very-clear-c.jpg"
+                 src="v/a/my-very-clear.mp4" poster="p/my-very-clear-a.jpg" muted loop playsinline preload="none"></video>
+          <button class="play" type="button" aria-label="Play Very clear"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M8 5.5v13a1 1 0 0 0 1.5.86l10.4-6.5a1 1 0 0 0 0-1.72L9.5 4.64A1 1 0 0 0 8 5.5z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="6" y="5" width="4.5" height="14" rx="1.5"/><rect x="13.5" y="5" width="4.5" height="14" rx="1.5"/></svg></button>
+          <button class="slow" type="button" aria-pressed="false" aria-label="Slow motion" title="0.5×"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 16.5c0-4.4 3.6-8 8-8s8 3.6 8 8z"/><circle cx="20.5" cy="13" r="1.8"/><path d="M6.5 17.5v2M17.5 17.5v2" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg></button>
+        </div>
+        <div class="info">
+          <div class="score"><svg class="ring " viewBox="0 0 54 54" width="54" height="54" aria-hidden="true"><circle cx="27.0" cy="27.0" r="23.50" class="ring-bg" stroke-width="7"/><circle cx="27.0" cy="27.0" r="23.50" class="ring-fg" stroke-width="7" stroke-dasharray="147.7" stroke-dashoffset="5.0" style="--c:147.7;--o:5.0"/></svg><b>97<small>%</small></b></div>
+          <div class="txt">
+            <h3><span data-en="Very clear" data-ar="واضح جدًا">Very clear</span></h3>
+            <p class="chips">
+              <span class="tier t-ex"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2.8l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 16.8l-5.4 2.9 1-6.1-4.4-4.3 6.1-.9z"/></svg><i data-en="Excellent" data-ar="ممتاز">Excellent</i></span>
+              <span><i data-en="Movement" data-ar="الحركة">Movement</i> 0.99</span>
+              <span><i data-en="Hand" data-ar="اليد">Hand</i> 94%</span>
+              <span data-en="Same frame" data-ar="نفس الفريم">Same frame</span>
+            </p>
+          </div>
+          <div class="seg" role="group" aria-label="View">
+            <button type="button" class="on" data-m="a" aria-pressed="true" data-en="Avatar" data-ar="الأفاتار">Avatar</button>
+            <button type="button" data-m="c" aria-pressed="false" data-en="Compare" data-ar="مقارنة">Compare</button>
+          </div>
+        </div>
+      </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="sec" id="contact" aria-labelledby="ct-h">
+    <div class="wrap">
+      <div class="contact">
+        <div class="faces"><img src="img/face-sa.png" alt=""><img src="img/face-my.png" alt=""></div>
+        <h2 id="ct-h" data-en="Contact me" data-ar="تواصل معي">Contact me</h2>
+        <div class="ct-actions">
+          <a class="btn mail" href="mailto:khaled0wleed@gmail.com?subject=Bayyina"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M4.5 8l7.5 5.2L19.5 8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><bdi>khaled0wleed@gmail.com</bdi></a>
+          <button class="btn copy" type="button" id="copy-mail" data-en="Copy" data-ar="نسخ">Copy</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <img src="img/logo-white.png" alt="Bayyina logo">
+    <div><b data-en="Bayyina" data-ar="بيّنا">Bayyina</b><p data-en="Sign language for everyone." data-ar="لغة الإشارة للجميع.">Sign language for everyone.</p></div>
+    <div class="fine">
+      <p class="rights">© 2026 <bdi>Khaled Waleed Khamis Ba Tais</bdi> · <span data-en="All rights reserved." data-ar="جميع الحقوق محفوظة.">All rights reserved.</span></p>
+      <p><span data-en="Contact:" data-ar="للتواصل:">Contact:</span> <a href="mailto:khaled0wleed@gmail.com"><bdi>khaled0wleed@gmail.com</bdi></a></p>
+      <p data-en="Original sign videos: MFD (Malaysia) and the Saudi Sign Language Dictionary." data-ar="مقاطع الإشارة الأصلية: MFD (ماليزيا) وقاموس لغة الإشارة السعودية.">Original sign videos: MFD (Malaysia) and the Saudi Sign Language Dictionary.</p>
+    </div>
+  </div>
+</footer>
+
+<nav class="tabbar" aria-label="Sections">
+  <a href="#home"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3.5 11.2 12 4l8.5 7.2V20a1 1 0 0 1-1 1H15v-5.5H9V21H4.5a1 1 0 0 1-1-1z"/></svg><span data-en="Home" data-ar="الرئيسية">Home</span></a>
+  <a href="#avatars"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="8.5" cy="8" r="3.5"/><circle cx="16.5" cy="9" r="3"/><path d="M2 20c.4-3.9 3-6.2 6.5-6.2S14.6 16.1 15 20zM14.5 14.1c3.6-.6 6.7 1.4 7.5 5.9h-5.2c-.3-2.4-1-4.3-2.3-5.9z"/></svg><span data-en="Avatars" data-ar="الأفاتار">Avatars</span></a>
+  <a href="#accuracy"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2.4"/><circle cx="12" cy="12" r="4.6" fill="none" stroke="currentColor" stroke-width="2.4"/><circle cx="12" cy="12" r="1.6"/></svg><span data-en="Accuracy" data-ar="الدقة">Accuracy</span></a>
+  <a href="#signs"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="8" height="8" rx="2.2"/><rect x="13" y="3" width="8" height="8" rx="2.2"/><rect x="3" y="13" width="8" height="8" rx="2.2"/><rect x="13" y="13" width="8" height="8" rx="2.2"/></svg><span data-en="Signs" data-ar="الإشارات">Signs</span></a>
+  <a href="#contact"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5.5" width="18" height="13" rx="2.5" fill="none" stroke="currentColor" stroke-width="2.2"/><path d="M4.5 8l7.5 5.2L19.5 8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"/></svg><span data-en="Contact" data-ar="تواصل">Contact</span></a>
+</nav>
+
+<script>
+(function () {
+  var root = document.documentElement;
+  function setLang(l) {
+    root.lang = l; root.dir = l === "ar" ? "rtl" : "ltr";
+    document.querySelectorAll("[data-en]").forEach(function (el) { el.textContent = el.getAttribute("data-" + l); });
+    try { localStorage.setItem("bayyina-lang", l); } catch (e) {}
+  }
+  var saved = null;
+  try { saved = localStorage.getItem("bayyina-lang"); } catch (e) {}
+  var lang = saved || ((navigator.language || "").toLowerCase().indexOf("ar") === 0 ? "ar" : "en");
+  if (lang === "ar") setLang("ar");
+  var h = (location.hash || "").slice(1);
+  document.getElementById("lang-toggle").addEventListener("click", function () { setLang(root.lang === "ar" ? "en" : "ar"); });
+
+  function showTab(t) {
+    document.querySelectorAll(".tab").forEach(function (b) { b.setAttribute("aria-selected", String(b.dataset.t === t)); });
+    document.getElementById("grid-sa").hidden = t !== "sa";
+    document.getElementById("grid-my").hidden = t !== "my";
+    document.querySelectorAll("video").forEach(function (v) { v.pause(); });
+  }
+  document.querySelectorAll(".tab").forEach(function (b) { b.addEventListener("click", function () { showTab(b.dataset.t); }); });
+  document.querySelectorAll("[data-go]").forEach(function (a) { a.addEventListener("click", function () { showTab(a.dataset.go); }); });
+  if (h === "malaysian" || h === "saudi") {
+    showTab(h === "malaysian" ? "my" : "sa");
+    var sg = document.getElementById("signs"); if (sg && sg.scrollIntoView) sg.scrollIntoView();
+  }
+
+  function playOnly(v) {
+    document.querySelectorAll("video").forEach(function (o) { if (o !== v) o.pause(); });
+    var p = v.play(); if (p && p.catch) p.catch(function () {});
+  }
+  document.querySelectorAll(".sign").forEach(function (card) {
+    var v = card.querySelector("video"), slow = card.querySelector(".slow");
+    v.addEventListener("play", function () { card.classList.add("playing"); v.playbackRate = slow.getAttribute("aria-pressed") === "true" ? 0.5 : 1; });
+    v.addEventListener("pause", function () { card.classList.remove("playing"); });
+    card.querySelector(".play").addEventListener("click", function () { v.paused ? playOnly(v) : v.pause(); });
+    v.addEventListener("click", function () { v.paused ? playOnly(v) : v.pause(); });
+    slow.addEventListener("click", function () {
+      var on = slow.getAttribute("aria-pressed") !== "true";
+      slow.setAttribute("aria-pressed", String(on)); v.playbackRate = on ? 0.5 : 1;
+    });
+    card.querySelectorAll(".seg button").forEach(function (b) {
+      b.addEventListener("click", function () {
+        if (card.dataset.mode === b.dataset.m) return;
+        var was = !v.paused;
+        card.dataset.mode = b.dataset.m;
+        card.querySelectorAll(".seg button").forEach(function (o) { var on = o === b; o.classList.toggle("on", on); o.setAttribute("aria-pressed", String(on)); });
+        v.poster = v.dataset["p" + b.dataset.m]; v.src = v.dataset[b.dataset.m];
+        if (was) playOnly(v);
+        if (card.scrollIntoView) card.scrollIntoView({ block: "nearest", behavior: "smooth" });
+      });
+    });
+  });
+
+  var cp = document.getElementById("copy-mail");
+  if (cp) cp.addEventListener("click", function () {
+    var mail = "khaled0wleed@gmail.com";
+    function done() {
+      var ar = root.lang === "ar";
+      cp.textContent = ar ? "تم النسخ ✓" : "Copied ✓";
+      setTimeout(function () { cp.textContent = cp.getAttribute(root.lang === "ar" ? "data-ar" : "data-en"); }, 1600);
+    }
+    function fallback() {
+      var t = document.createElement("textarea");
+      t.value = mail; t.setAttribute("readonly", ""); t.style.position = "fixed"; t.style.opacity = "0";
+      document.body.appendChild(t); t.select();
+      try { document.execCommand("copy"); } catch (e) {}
+      document.body.removeChild(t); done();
+    }
+    try { navigator.clipboard.writeText(mail).then(done, fallback); } catch (e) { fallback(); }
+  });
+})();
+</script>
+</body>
+</html>
